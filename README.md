@@ -1,6 +1,6 @@
 # Film San Francisco
 
-i setup a new account on uberspace for hosting, but it turns out their service hook is currently not available. I already
+[Live Demo](https://filmsf.uber.space/movies)
 
 ## Build Stack
 - [Nuxt.js](https://nuxtjs.org)
