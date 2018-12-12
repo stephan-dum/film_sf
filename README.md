@@ -7,16 +7,21 @@
 - [PouchDB](https://pouchdb.com)
 
 ## Highlights
-- independent using replication
+- independent data using replication
+- reduced the that to ~ 300 docs (~1600 initial)
 - server side rendering
 - progressive enhancement
+
 
 ## Kown Issues
 - refactoring needed
 - better data model (see ./doc/er.pdf)
+- no webworker, no offline
 - testing incomplete
 - thumbs and images are not the same
 - no srcset
+- unhandeld cors errors from cloudant
+- no error pages
 - multi-range flashing on load
 - scrolltop for detail on seconds detail view (potential nuxt issue)
 
