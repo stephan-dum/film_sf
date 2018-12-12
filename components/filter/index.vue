@@ -29,7 +29,7 @@
           @change="syncState"
         >
       </div>
-      <div @change="syncState">
+      <div @focusout="syncState">
         <h3>Release Year</h3>
         <MultiRange
           :min="min_year"
