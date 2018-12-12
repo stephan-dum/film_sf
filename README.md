@@ -20,7 +20,7 @@
 - scrolltop for detail on seconds detail view (potential nuxt issue)
 
 ## Install
-First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html). Then configure the `./store/vars.js` file to fit you setup. Next open a terminal and do:
+First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html), and add the document `./couchdb/design_movies`.  Then configure the `./store/vars.js` file to fit you setup. Next open a terminal and do:
 
 ```bash
   #get the repo
@@ -29,12 +29,19 @@ First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html). Then c
   #install dependencies
   npm install
 
-  #replicate the data
-  #if the file is executable one can omit node
-  node ./bin/replicate.js
+  #install rollup
+  npm i rollup -D
 
-  #get some images
-  node ./bin/picsum.js
+  #build the replication
+  rollup ./bin/replicate.js --file ./bin/replicate.min.js --format cjs
+  rollup ./bin/picsum.js --file ./bin/picsum.min.js --format cjs
+
+  #replicate the data
+  node ./bin/replicate.min.js
+
+  #get some images, this may take a while
+  #will get save to ./static/img/movies
+  node ./bin/picsum.min.js
 
   #build
   npm run build

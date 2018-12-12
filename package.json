@@ -19,8 +19,7 @@
     "nuxt": "^2.0.0",
     "pouchdb": "^7.0.0",
     "pouchdb-find": "^7.0.0",
-    "qs": "^6.6.0",
-    "uuid": "^3.3.2"
+    "qs": "^6.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

@@ -1,14 +1,15 @@
-const host = "aboutweb.deneb.uberspace.de/film-sf";
-const protocol = "https";
+const host = "localhost";
+const protocol = "http";
 
 export default {
   site_name : "Film San Francisco",
-  site_url : "https://"+host
+  site_url : protocol+"://"+host
 };
 export const couchdb = {
-  host : host+"/couchdb",
-  protocol : "https",
+  host : host,
+  port : 5984,
+  protocol : "http",
   database : "film_sf",
-  reader : "guest",
+  reader : false,
   reader_password : "8JVkYanY2s6KMjPY"
 };

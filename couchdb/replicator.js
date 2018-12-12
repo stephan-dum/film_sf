@@ -1,6 +1,4 @@
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
 const LIMIT = 1000;
 
 function splitField(keyString) {
@@ -72,7 +70,6 @@ function sync(db, documents) {
         }
       )
 
-
       updateDocs.push(doc);
     });
 
@@ -81,32 +78,43 @@ function sync(db, documents) {
 }
 
 function replicate(db, since, offset = 0) {
-  queue = [
-    axios({
-      method : "GET",
-      url : "https://data.sfgov.org/resource/wwmu-gmzc.json",
-      params : {
-        $where : ":updated_at >= '"+since+"'",
-        $limit : LIMIT,
-        $select : "*,:id as movie_id, :updated_at",
-        $order : " :updated_at",
-        $offset : LIMIT*offset
+  return axios({
+    method : "GET",
+    url : "https://data.sfgov.org/resource/wwmu-gmzc.json",
+    params : {
+      $where : ":updated_at >= '"+since+"'",
+      $limit : LIMIT,
+      $select : "*,:id as movie_id, :updated_at",
+      $order : " :updated_at",
+      $offset : LIMIT*offset
+    }
+  }).then((response) => {
+    let data = response.data;
+
+    return sync(db, data).then(() => {
+      if(data.length == LIMIT) {
+        return replicate(db, since, ++offset);
       }
-    }).then((response) => {
-      let data = response.data;
 
-      return sync(db, data).then(() => {
-        if(data.length == LIMIT) {
-          return replicate(db, since, ++offset);
-        }
+      return data[data.length-1][":updated_at"];;
+    });
+  });
+}
 
-        return data[data.length-1][":updated_at"];;
-      });
-    })
-  ];
+function persistentReplication(db) {
+  return db.allDocs({
+    include_docs : true,
+    key : "meta"
+  }).then((response) => {
+    let doc = (
+      response.rows.length
+        ?response.rows[0].doc
+        :{}
+    );
 
-  if(offset == 0) {
-    queue.push(
+    let since = doc.since || "1970-01-01";
+
+    return Promise.all([
       axios({
         method : "GET",
         url : "https://data.sfgov.org/resource/wwmu-gmzc.json",
@@ -114,50 +122,17 @@ function replicate(db, since, offset = 0) {
           $where : ":updated_at >= '"+since+"'",
           $select : "min(release_year) as min_year, max(release_year) as max_year"
         }
-      }).then((response) => {
-        let {
-          min_year,
-          max_year
-        } = response.data[0];
-
-        return db.allDocs({
-          key : "meta"
-        }).then((response) => {
-          return db.put({
-            _id : "meta",
-            _rev : response.rows[0].value.rev,
-            min_year,
-            max_year
-          });
-        })
-      })
+      }).then((response) => response.data[0], console.warn),
+      replicate(db, since)
+    ]).then(
+      ({ min_year, max_year }, since) => db.put({
+        _id : "meta",
+        _rev : doc._rev,
+        since,
+        min_year,
+        max_year
+      }).catch(console.warn)
     );
-  }
-
-
-  return Promise.all(queue);
-}
-
-function persistentReplication(
-  db,
-  fileId = path.join(__dirname, "./curr.date")
-) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(fileId, function(error, since) {
-      if(error) {
-        return reject(error);
-      }
-
-      replicate(db, since.toString().trim()).then(([lastUpdate]) => {
-        fs.writeFile(fileId, lastUpdate, (error) => {
-          if(error) {
-            return reject(error);
-          }
-
-          resolve();
-        });
-      });
-    });
   });
 }
 

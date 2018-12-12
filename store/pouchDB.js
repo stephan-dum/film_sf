@@ -14,7 +14,13 @@ let {
   database
 } = couchdb;
 
-let url = protocol+"://"+reader+":"+reader_password+"@"+host;
+let url = protocol+"://";
+
+if(reader) {
+  url += reader+":"+reader_password+"@";
+}
+
+url += host;
 
 if(port) {
   url += ":"+port;

@@ -32,6 +32,9 @@ function imageLoader(db) {
     use_index : ["movies","title"],
     limit : LIMIT,
     selector : {
+      "$not" : {
+        "_id" : "meta"
+      },
       "img" : {
         "$exists" : false
       }
