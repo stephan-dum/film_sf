@@ -1,0 +1,42 @@
+.navi {
+	position:sticky;
+	top:0;
+	box-sizing:border-box;
+	background-color:white;
+	height:3.5em;
+
+
+	>.list {
+		border-bottom:1px solid $color_main;
+
+		a {
+			text-decoration:none;
+			color: $color_main;
+			background-color: $color_white;
+			transition: color 0.5s, background-color 0.5s;
+
+			&:hover {
+				background-color: $color_main;
+				color: $color_white;
+			}
+		}
+	}
+	
+	.logo {
+		height:3.5em;
+		position:fixed;
+		top:0;
+		left:0;
+
+		> a {
+			background-color: $color_white !important;
+			padding:0.5em 1em;
+			box-sizing:border-box;
+			border-top:0 !important;
+
+			> img {
+				height: 100%;
+			}
+		}
+	}
+}

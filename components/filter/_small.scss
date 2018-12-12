@@ -1,0 +1,142 @@
+#open_filter,
+#close_filter {
+	position:fixed;
+	top:0;
+}
+
+@keyframes slideOut {
+	0% {
+		overflow:hidden;
+		max-height: 100vh;
+		padding:0.5em 0.5em;
+		padding-top:0;
+		margin-top:0em;
+	}
+	100% {
+		max-height: 0vh;
+		overflow:hidden;
+		padding:0em 0.5em;
+		margin-top:-3.5em;
+		padding-top:3.5em;
+	}
+}
+
+@keyframes slideIn {
+	0% {
+		overflow:hidden;
+		max-height: 0vh;
+		padding:0em 0.5em;
+		margin-top:0em;
+	}
+	99% {
+		overflow:hidden;
+		max-height: 100vh;
+	}
+	100% {
+		max-height: 100vh;
+		overflow:auto;
+		padding:0.5em 0.5em;
+		padding-top:3.5em;
+		margin-top:-3.5em;
+	}
+}
+
+.dialog {
+	top: 0;
+  left: 0;
+  border: 0;
+	height:3.5em;
+  border-bottom: 1px solid $color_main;
+  width: 100%;
+
+	&:after {
+		content:"";
+		position: absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:3.5em;
+		background-color:$color_white;
+		border-bottom:1px solid $color_main;
+	}
+
+	.logo {
+    height:100%;
+		position: relative;
+		z-index: 1;
+		> * {
+			height:100%;
+		}
+	}
+
+	.toggler {
+		position:absolute;
+		top:0;
+		right:1em;
+		width: 2em;
+		height: 3.5em;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		z-index:1;
+
+		> div {
+			background-color: $color_main;
+			height: 0.1875em;
+			margin: 0.125em 0;
+			transition: transform 0.5s, opacity 0.5s;
+			transform:translateY(0em) rotate(0deg);
+
+			&:first-child {
+				margin-top:0;
+			}
+		}
+
+		> a {
+			position:absolute;
+			width:100%;
+			height:100%;
+		}
+	}
+
+	> .content {
+		max-height:0vh;
+		width:100%;
+		padding:0em 0.5em;
+		overflow:hidden;
+		position:absolute;
+		background-color: $color_white;
+		border-bottom:1px solid $color_main;
+	}
+	#close_filter:target {
+		~ .content {
+			animation : 0.75s slideOut;
+		}
+	}
+	#open_filter:target {
+		~ .content {
+			max-height:100vh;
+			overflow:auto;
+			padding:0.5em 0.5em;
+			padding-top:3.5em;
+			margin-top:-3.5em;
+			animation : 0.75s slideIn;
+		}
+		~ .toggler {
+			> .close {
+				z-index:1;
+			}
+			div {
+				&:first-child {
+					transform:translateY(0.4375em) rotate(45deg);
+				}
+				&:nth-child(2) {
+					opacity:0;
+				}
+				&:last-of-type {
+					transform:translateY(-0.4375em) rotate(-45deg);
+				}
+			}
+		}
+	}
+}
