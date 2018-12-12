@@ -12,7 +12,6 @@
 - server side rendering
 - progressive enhancement
 
-
 ## Kown Issues
 - refactoring needed
 - better data model (see ./doc/er.pdf)
@@ -20,6 +19,7 @@
 - testing incomplete
 - thumbs and images are not the same
 - no srcset
+- pouchdb indizes issues
 - unhandeld cors errors from cloudant
 - no error pages
 - multi-range issues
@@ -58,6 +58,9 @@ First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html), and ad
   #or for development
   npm run dev
 ```
+## Copyright
+All images from [picsum.photos](https://picsum.poto), logo and favicon from [freepik.com](https://freepik.com)
+
 ## Feedback
 is always welcome :-)
 
