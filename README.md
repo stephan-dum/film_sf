@@ -22,7 +22,7 @@
 - no srcset
 - unhandeld cors errors from cloudant
 - no error pages
-- multi-range flashing on load
+- multi-range issues
 - scrolltop for detail on seconds detail view (potential nuxt issue)
 
 ## Install
