@@ -26,10 +26,10 @@
           name="title"
           type="text"
           aria-label="only include movies containing this title"
-          @input="syncState"
+          @change="syncState"
         >
       </div>
-      <div @input="syncState">
+      <div @change="syncState">
         <h3>Release Year</h3>
         <MultiRange
           :min="min_year"
@@ -63,7 +63,7 @@
               :value="location"
               :name="'locations[]'"
               type="text"
-              @input="setLocation($event, key)"
+              @change="setLocation($event, key)"
             >
             <input
               :formaction="'/movies/filter/remove/locations/'+location"
@@ -118,7 +118,7 @@
                   <RoleSelect
                     :name="'collaborators['+key+'][role]'"
                     :value="collaborator.role"
-                    @input="setCollaborator($event, key, 'role')"
+                    @change="setCollaborator($event, key, 'role')"
                   />
                 </td>
                 <td>
@@ -126,7 +126,7 @@
                     :value="collaborator.name"
                     :name="'collaborators['+key+'][name]'"
                     type="text"
-                    @input="setCollaborator($event, key, 'name')"
+                    @change="setCollaborator($event, key, 'name')"
                   >
                 </td>
                 <td>

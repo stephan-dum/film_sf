@@ -10,6 +10,7 @@ yarn-error.log*
 .test
 .pwd
 .trash
+static
 
 # Runtime data
 pids

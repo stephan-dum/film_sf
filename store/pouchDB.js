@@ -26,15 +26,18 @@ if(port) {
   url += ":"+port;
 }
 
-const pouchDB = new PouchDB(url+"/"+database);
-
-if(process.BROWSER_BUILD) {
-  slave = new PouchDB(vars.couchdb_database);
-
-  slave.replicate(pouchDB).then(
-    () => { pouchDB = slave; }
-  );
-}
-
+const pouchDB = new PouchDB(url+"/"+database, {
+  ajax : {
+    headers : {
+      'Access-Control-Allow-Origin' : "*"
+      //Header set Access-ControlAllow-Methods  "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+      //Access-Control-Allow-Headers: "Origin, Content-Type, X-Auth-Token"
+    },
+    fetch: function (url, opts) {
+      opts.headers.set('Access-Control-Allow-Origin', '*');
+      return PouchDB.fetch(url, opts);
+    }
+  }
+});
 
 export default pouchDB;

@@ -2,8 +2,8 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const PUBLIC_FOLDER = "img/movies/";
-const STATIC_FOLDER = path.join(__dirname, "../static", PUBLIC_FOLDER);
+const PUBLIC_FOLDER = "https://filmsf.uber.space/img/movies/";
+const STATIC_FOLDER = path.join(__dirname, "../static/img/movies");
 const LIMIT = 5;
 
 function getImage(dest, w, h = w) {
@@ -29,7 +29,6 @@ function getImage(dest, w, h = w) {
 
 function imageLoader(db) {
   return db.find({
-    use_index : ["movies","title"],
     limit : LIMIT,
     selector : {
       "$not" : {
@@ -45,8 +44,8 @@ function imageLoader(db) {
     let updateDocs = response.docs.map((doc) => {
         let movie_id = doc.movie_id;
 
-        doc.img = "/"+PUBLIC_FOLDER+movie_id+".jpg";
-        doc.img_thumb = "/"+PUBLIC_FOLDER+movie_id+"_thumb.jpg";
+        doc.img = PUBLIC_FOLDER+movie_id+".jpg";
+        doc.img_thumb = PUBLIC_FOLDER+movie_id+"_thumb.jpg";
 
         queue.push(
           getImage(path.join(STATIC_FOLDER, movie_id+".jpg"), 650, 200),
@@ -59,6 +58,7 @@ function imageLoader(db) {
     return Promise.all(queue).then(
       () => db.bulkDocs(updateDocs),
       (error) => {
+        console.log("connection gone bad lets wait 3 seconds");
         //Origin Connection Limit Reached
         if(error.response.status == 531) {
           return new Promise((resolve) => {

@@ -1,5 +1,7 @@
 # Film San Francisco
 
+i setup a new account on uberspace for hosting, but it turns out their service hook is currently not available. I already
+
 ## Build Stack
 - [Nuxt.js](https://nuxtjs.org)
 - [PouchDB](https://pouchdb.com)
@@ -8,7 +10,6 @@
 - independent using replication
 - server side rendering
 - progressive enhancement
-- offline
 
 ## Kown Issues
 - refactoring needed
@@ -30,7 +31,7 @@ First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html), and ad
   npm install
 
   #install rollup
-  npm i rollup -D
+  npm i rollup -g
 
   #build the replication
   rollup ./bin/replicate.js --file ./bin/replicate.min.js --format cjs
@@ -39,8 +40,8 @@ First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html), and ad
   #replicate the data
   node ./bin/replicate.min.js
 
-  #get some images, this may take a while
-  #will get save to ./static/img/movies
+  #get some images from picsum, this may take a while
+  #will save to ./static/img/movies
   node ./bin/picsum.min.js
 
   #build

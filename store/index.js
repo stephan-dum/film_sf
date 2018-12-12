@@ -1,6 +1,26 @@
 import { stringify } from "qs";
-import pouchDB from "./pouchDB.js";
+import PouchDB from "pouchdb";
+import serverDB from "./pouchDB.js";
 import vars from "./vars.js";
+import { couchdb } from "./vars.js";
+
+let pouchDB = serverDB;
+/*
+if(process.browser) {
+  const slave = new PouchDB(couchdb.database);
+
+  slave.createIndex({
+    index: {
+      fields: ['title'],
+      name : "title",
+      ddoc : "movies"
+    },
+  }).then(() => {
+    slave.replicate.from(pouchDB).then(
+      () => { pouchDB = slave; }
+    );
+  })
+}*/
 
 const LIMIT = 12;
 const ROLES = ["actors", "directors", "writers", "producers", "distributors"];
@@ -17,9 +37,101 @@ function getInitFilter() {
   }
 }
 
+export function query(db, filter, offset) {
+  let {
+    title,
+    release_year_min,
+    release_year_max,
+    locations,
+    collaborators
+  } = filter;
+
+  let selector = {};
+
+  if(title) {
+    selector.title = {
+      "$regex" : "(?i)"+title
+    }
+  }
+
+  if(release_year_min || release_year_max) {
+    let year = selector.release_year = {};
+
+    if(release_year_min) {
+      year["$gte"] = parseInt(release_year_min);
+    }
+
+    if(release_year_max) {
+      year["$lte"] = parseInt(release_year_max);
+    }
+  }
+
+  if(locations.length) {
+    selector.locations = {
+      "$elemMatch" : {
+        "$regex" : "(?i)"+locations.join("|")
+      }
+    }
+  }
+
+  if(collaborators.length) {
+    let obj = {};
+    let any = [];
+
+    collaborators.forEach(({ role, name }) => {
+      if(role == "any") {
+        any.push(name);
+      } else if(obj[role]) {
+        obj[role].push(name);
+      } else {
+        obj[role] = [name];
+      }
+    })
+
+    let or = []
+
+    for(let role in obj) {
+      obj[role].push(...any);
+
+      or.push({
+        [role] : {
+          "$elemMatch" : {
+            "$regex" : "(?i)"+obj[role].join("|")
+          }
+        }
+      });
+    }
+
+    if(any.length) {
+      ROLES.forEach((role) => {
+        if(!obj[role]) {
+          or.push({
+            [role] : {
+              "$elemMatch" : {
+                "$regex" : "(?i)"+any.join("|")
+              }
+            }
+          });
+        }
+      });
+    }
+
+    selector["$or"] = or;
+  }
+
+  return db.find({
+    selector,
+    sort : ["title"],
+    limit : LIMIT+1,
+    skip : offset*LIMIT,
+    use_index : ["movies", "title"]
+  });
+}
+
+
+
 export default {
   state() {
-
     return {
       insertRole : "any",
       limit : LIMIT,
@@ -68,8 +180,7 @@ export default {
       this.state.hasNext = hasNext;
     },
     setDetails(state, details) {
-      state.share_url = vars.site_url+'/movie/'+details.title;
-      console.log("details", details);
+      state.share_url = vars.site_url+'/movies/'+details.title;
       state.details = details;
     },
     addLocation(state, location) {
@@ -143,7 +254,6 @@ export default {
 
       offset = parseInt(offset);
 
-
       commit("setFilter", {
         title,
         release_year_min,
@@ -151,7 +261,6 @@ export default {
         locations,
         collaborators
       });
-
 
       if(insert_collaborator && insert_collaborator.name) {
         commit("addCollaborator", insert_collaborator);
@@ -162,86 +271,9 @@ export default {
 
       this.commit("setOffset", offset);
 
-      let selector = {};
 
-      if(title) {
-        selector.title = {
-          "$regex" : "(?i)"+title
-        }
-      }
 
-      if(release_year_min || release_year_max) {
-        let year = selector.release_year = {};
-
-        if(release_year_min) {
-          year["$gte"] = parseInt(release_year_min);
-        }
-
-        if(release_year_max) {
-          year["$lte"] = parseInt(release_year_max);
-        }
-      }
-
-      if(locations.length) {
-        selector.locations = {
-          "$elemMatch" : {
-            "$regex" : "(?i)"+locations.join("|")
-          }
-        }
-      }
-
-      if(collaborators.length) {
-        let obj = {};
-        let any = [];
-
-        collaborators.forEach(({ role, name }) => {
-          if(role == "any") {
-            any.push(name);
-          } else if(obj[role]) {
-            obj[role].push(name);
-          } else {
-            obj[role] = [name];
-          }
-        })
-
-        let or = []
-
-        for(let role in obj) {
-          obj[role].push(...any);
-
-          or.push({
-            [role] : {
-              "$elemMatch" : {
-                "$regex" : "(?i)"+obj[role].join("|")
-              }
-            }
-          });
-        }
-
-        if(any.length) {
-          ROLES.forEach((role) => {
-            if(!obj[role]) {
-              or.push({
-                [role] : {
-                  "$elemMatch" : {
-                    "$regex" : "(?i)"+any.join("|")
-                  }
-                }
-              });
-            }
-          });
-        }
-
-        selector["$or"] = or;
-      }
-
-      return pouchDB.find({
-        selector,
-        sort : ["title"],
-        limit : LIMIT+1,
-        skip : offset*LIMIT,
-        use_index : ["movies","title"]
-      }).then(({ docs }) => {
+      return query(pouchDB, this.state.filter, offset).then(({ docs }) => {
         let hasNext = docs.length > LIMIT;
 
         if(hasNext) {

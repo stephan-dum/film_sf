@@ -125,12 +125,11 @@ function persistentReplication(db) {
       }).then((response) => response.data[0], console.warn),
       replicate(db, since)
     ]).then(
-      ({ min_year, max_year }, since) => db.put({
+      ([year, since]) => db.put({
         _id : "meta",
         _rev : doc._rev,
         since,
-        min_year,
-        max_year
+        ...year
       }).catch(console.warn)
     );
   });

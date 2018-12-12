@@ -29,7 +29,7 @@
                 itemprop="director"
                 aria-label="Director"
               >
-                {{ movie.directors.join("") }}
+                {{ (movie.directors || []).join("") }}
               </span>
             </li>
             <li>
