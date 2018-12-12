@@ -1,23 +1,23 @@
 # Film San Francisco
 
 ## Build Stack
-  [Nuxt.js](https://nuxtjs.org)
-  [PouchDB](https://pouchdb.com)
+- [Nuxt.js](https://nuxtjs.org)
+- [PouchDB](https://pouchdb.com)
 
 ## Highlights
-  independent using replication
-  server side rendering
-  progressive enhancement
-  offline
+- independent using replication
+- server side rendering
+- progressive enhancement
+- offline
 
 ## Kown Issues
-  refactoring needed
-  better data model (see ./doc/er.pdf)
-  testing incomplete
-  thumbs and images are not the same
-  no srcset
-  multi-range flashing on load
-  scrolltop for detail on seconds detail view (potential nuxt issue)
+- refactoring needed
+- better data model (see ./doc/er.pdf)
+- testing incomplete
+- thumbs and images are not the same
+- no srcset
+- multi-range flashing on load
+- scrolltop for detail on seconds detail view (potential nuxt issue)
 
 ## Install
 First get [Couchdb](http://docs.couchdb.org/en/stable/install/unix.html). Then configure the `./store/vars.js` file to fit you setup. Next open a terminal and do:
