@@ -48,6 +48,7 @@
 	height:3.5em;
   border-bottom: 1px solid $color_main;
   width: 100%;
+	z-index:2;
 
 	&:after {
 		content:"";
