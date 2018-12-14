@@ -8,7 +8,7 @@
 
 ## Highlights
 - independent data using replication
-- reduced the that to ~ 300 docs (~1600 initial)
+- reduced the data to ~ 300 docs (~1600 initial)
 - server side rendering
 - progressive enhancement
 
