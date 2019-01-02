@@ -1,0 +1,36 @@
+{
+  "_id": "_design/movies",
+  "language": "query",
+  "views": {
+    "filter": {
+      "map": {
+        "fields": {
+          "title" : "asc",
+          "release_year" : "asc",
+          "locations" : "asc",
+          "actors" : "asc",
+          "directors" : "asc",
+          "writers" : "asc",
+          "producers" : "asc",
+          "distributors" : "asc"
+        },
+        "partial_filter_selector": {}
+      },
+      "reduce": "_count",
+      "options": {
+        "def": {
+          "fields": [
+            "title",
+            "release_year",
+            "locations",
+            "actors",
+            "directors",
+            "writers",
+            "producers",
+            "distributers"
+          ]
+        }
+      }
+    }
+  }
+}

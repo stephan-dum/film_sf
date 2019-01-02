@@ -1,4 +1,3 @@
-
 const pkg = require('./package')
 
 module.exports = {
@@ -14,45 +13,36 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
+    script : [
+      {
+        innerHTML: 'document.body.classList.add("js");',
+        type: 'text/javascript',
+        body : true
+      }
+    ],
+    __dangerouslyDisableSanitizers : ["script"],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
-  },
-  router : {
-    extendRoutes(routes, resolve) {
-      routes.push({
-        path : "/",
-        redirect : { name : "movies" }
-      }, {
-        path : "/movies/filter/remove/:type/:name/:role?",
-        redirect : { name : "movies" }
-      });
-    },
-    parseQuery(query) {
-      return require('qs').parse(query);
-    },
-    stringifyQuery(query) {
-      let result = require('qs').stringify(query);
-
-      return result ? ('?' + result) : '';
-    }
   },
   /*
   ** Customize the progress-bar color
   */
   loading: { color: '#fff' },
-
+  router : {},
   /*
   ** Global CSS
   */
-  css: [
-    "~/assets/main.css"
-  ],
+
+  css: [],
 
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: [
+    "~/plugins/inject-store.js",
+    "~/plugins/pouchdb.js"
+  ],
 
   /*
   ** Nuxt.js modules
@@ -62,8 +52,9 @@ module.exports = {
     '@nuxtjs/axios',
     [
       'nuxt-sass-resources-loader',
-      ["./assets/var.scss"]
-    ]
+      ["./config/var.scss"]
+    ],
+    ['@nuxtjs/router', { keepDefaultRouter: true }]
   ],
   /*
   ** Axios module configuration

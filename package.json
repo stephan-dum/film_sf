@@ -14,10 +14,13 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/router": "^1.1.0",
     "cross-env": "^5.2.0",
+    "escape-string-regexp": "^1.0.5",
     "express": "^4.16.3",
     "nuxt": "^2.0.0",
     "pouchdb": "^7.0.0",
+    "pouchdb-debug": "^7.0.0",
     "pouchdb-find": "^7.0.0",
     "qs": "^6.6.0"
   },

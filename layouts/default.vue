@@ -1,5 +1,5 @@
 <template>
-  <section :class="'flex column '+mainClass">
+  <section class="flex column ">
     <nuxt/>
     <Footer/>
   </section>
@@ -51,6 +51,23 @@
     display:none !important;
   }
 
+  input[type="number"],
+  input[type="text"] {
+    width:100%;
+    border:1px solid $color_black;
+    padding:0.5em;
+    box-sizing:border-box;
+    outline:none;
+    height:2em;
+    font-size: 1em;
+  }
+
+  .page-enter-active, .page-leave-active {
+    transition: opacity .5s;
+  }
+  .page-enter, .page-leave-to {
+    opacity: 0;
+  }
 
   .flex {
     display:flex;
@@ -76,14 +93,6 @@
   export default {
     components : {
       Footer
-    },
-    data() {
-      return {
-        mainClass : ""
-      }
-    },
-    mounted() {
-      this.mainClass = "js";
     }
   }
 </script>

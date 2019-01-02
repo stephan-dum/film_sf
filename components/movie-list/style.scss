@@ -1,0 +1,158 @@
+colgroup > .grow {
+  width:100%;
+}
+body.nojs .nojs {
+  display:none;
+}
+
+main {
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+}
+
+#movies {
+  flex-grow:1;
+  position:relative;
+
+  > h1 {
+    padding: 0 0.25em;
+    font-size:2em;
+  }
+
+  > .list {
+    width:100%;
+    flex-wrap:wrap;
+  }
+}
+.fluid {
+  padding:1em;
+  box-sizing:border-box;
+  position:relative;
+  z-index:0;
+  display:flex;
+  flex-direction:column;
+
+
+  &:before {
+    content : "";
+    position:absolute;
+    top:0.5em;
+    left:0.5em;
+    right:0.5em;
+    bottom:0.5em;
+    background-color:$color_white;
+    z-index:-1;
+  }
+  > h3 {
+    flex-grow:1;
+  }
+  img {
+    height: auto;
+    width: 100%;
+  }
+}
+.noEntry {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.footer {
+  padding:1em;
+
+  a {
+    display: block;
+    min-width:120px;
+  }
+
+  > span:first-child > a {
+    &:before {
+      content : "<";
+      color:$color_black;
+    }
+    &:hover:before {
+      color:$color_main;
+    }
+  }
+  > span:last-child > a {
+    text-align: right;
+
+    &:after {
+      content : ">";
+      color:$color_black;
+    }
+    &:hover:after {
+      color:$color_main;
+    }
+  }
+
+  > #stats {
+    flex-grow: 1;
+    text-align:center;
+    font-size:0.75em;
+    font-weight:bold;
+  }
+}
+@media (max-width:464px) {
+  .fluid {
+    width:100%;
+  }
+}
+@media (min-width:465px) and (max-width:599px) {
+  .fluid {
+    width:50%;
+  }
+}
+@media (min-width:600px) and (max-width:799px) {
+  .fluid {
+    width:33.33%;
+  }
+}
+@media (max-width:799px) {
+  #movies {
+    padding-top:3.5em;
+  }
+  h1 {
+    text-align:center;
+  }
+}
+@media (min-width:800px) and (max-width:949px) {
+  .fluid {
+    width:50%;
+  }
+}
+@media (min-width:950px) and (max-width:1099px) {
+  .fluid {
+    width:33.33%;
+  }
+}
+@media (min-width:1100px) and (max-width:1249px) {
+  .fluid {
+    width:25%;
+  }
+}
+@media (min-width:1250px) and (max-width:1399px) {
+  .fluid {
+    width:20%;
+  }
+}
+@media (min-width:1400px) {
+  .fluid {
+    width:16.66%;
+  }
+}
+@media (min-width : 800px) {
+  #movies {
+    margin-left:300px;
+    padding:0 0.5em;
+    padding-left:1.5em;
+    max-width:1400px;
+  }
+}
+@media (max-width : 365px) {
+  #stats {
+    opacity: 0;
+    min-width: 0;
+  }
+}

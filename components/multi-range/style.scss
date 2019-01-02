@@ -1,0 +1,108 @@
+$track: .25em;
+$thumb: 1.5em;
+
+@keyframes await {
+  0% { opacity: 0; }
+  99% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+body:not(.js) .multirange {
+
+  label {
+    display:flex;
+    align-items:center;
+    padding:0.25em 0;
+
+    input {
+      width:5em;
+      flex-grow: 1;
+    }
+
+    &::before {
+      content:attr(aria-label);
+      padding:0 0.5em;
+      font-size:small;
+      font-weight:bold;
+      min-width:100px;
+    }
+  }
+}
+
+.multirange input[type="number"] {
+  animation:await 0.5s;
+}
+
+.js .multirange {
+  position: relative;
+  width:100%;
+  height:$thumb;
+  display: block;
+
+  input[type="number"] {
+    display: none;
+  }
+
+  .track {
+    position: absolute;
+    background-color: $color_dark_gray;
+    height:$track;
+    top:50%;
+    transform: translateY(-50%);
+    left:0.5em;
+    right:0.5em;
+
+    > div {
+      background-color: $color_main;
+      position: absolute;
+      height:100%;
+    }
+  }
+
+  .max > input {
+    right:0;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    position: absolute;
+    outline:none;
+    width:calc(100% - 1.5em);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    height:100%;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      margin: 0;
+      padding: 0;
+
+      z-index: 1;
+      position: relative;
+      cursor: pointer;
+      box-sizing: border-box;
+      border: none;
+      width: $thumb;
+      height: $thumb;
+      border-radius: 50%;
+      background: $color_main;
+    }
+
+
+  }
+
+  output:before {
+    content: attr(value);
+    display: block;
+    position:absolute;
+    top:-0.25em;
+    right:0;
+    padding:0.5em;
+    box-sizing:border-box;
+    transform: translateY(-100%);
+    color:$color_white;
+    background-color:$color_main;
+    border-radius:0.25em;
+  }
+}

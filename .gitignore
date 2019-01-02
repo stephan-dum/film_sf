@@ -9,7 +9,7 @@ yarn-error.log*
 .draft
 .test
 .pwd
-static
+.pouchdb
 
 # Runtime data
 pids

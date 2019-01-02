@@ -1,0 +1,128 @@
+.select_edge {
+  display:inline-block;
+  min-width:125px;
+
+  > .list {
+    position:relative;
+    min-height:2em;
+    z-index:-1;
+    padding:0;
+    margin:0;
+    border:0;
+    margin-right:1.5em;
+
+    input {
+      display:none;
+    }
+
+    &:active {
+      z-index:2;
+    }
+
+    .label {
+      padding:0.5em;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &:before {
+      content: "";
+      width: 1.5em;
+      position: absolute;
+      height: 2em;
+      right: -1.5em;
+      border: 1px solid black;
+      box-sizing: border-box;
+      z-index: 2;
+      margin-right: 1px;
+      cursor:pointer;
+    }
+
+    > ul {
+      list-style:none;
+      margin:0;
+      padding:0;
+      position:absolute;
+      outline:none;
+      width:100%;
+      box-sizing:border-box;
+      line-height:1em;
+      border:1px solid $color_black;
+      z-index:1;
+      height:100%;
+      background-color:$color_white;
+
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        right: -1em;
+        top: 0.5em;
+        transition: all 0.5s;
+        border: 0.25em solid transparent;
+        cursor: pointer;
+        z-index: 1;
+        pointer-events: none;
+        border-bottom-color: $color_black;
+      }
+
+      &:before {
+        transform: rotate(45deg);
+      }
+
+      &:after {
+        transform:rotate(-45deg);
+      }
+    }
+  }
+
+  > .opener {
+    width:100%;
+    margin-bottom:-2em;
+    height:2em;
+    opacity:0;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    display:block;
+    z-index:2;
+    -webkit-tap-highlight-color: transparent;
+
+    &:not(:focus) + .list:not(:active) input:not(:checked) + .label {
+      display:none;
+    }
+
+    &:focus {
+      z-index:0;
+    }
+
+    &:focus + .list,
+    + .list:active {
+      z-index:2;
+
+      input:checked + .label {
+        background-color:$color_main;
+        color:$color_white;
+        cursor:initial;
+      }
+
+      > ul {
+        height:auto;
+        &:before,
+        &:after {
+          border-right-width: 0em;
+          border-left: 0.15em solid $color_black;
+          border-bottom-width: 0.825em;
+          right: -0.8em;
+          pointer-events: initial;
+          border-top-width: 0em;
+        }
+      }
+
+      .label:hover {
+        background-color:$color_main;
+        color:$color_white;
+      }
+    }
+  }
+}
